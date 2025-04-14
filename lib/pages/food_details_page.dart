@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:proj/components/button.dart';
+import 'package:proj/models/shop.dart';
 import 'package:proj/theme/colors.dart';
+import 'package:provider/provider.dart';
 import '../models/food.dart';
 
 class FoodDetailsPage extends StatefulWidget {
@@ -19,7 +21,9 @@ class _FoodDetailsPageState extends State<FoodDetailsPage> {
 
   void decrementQuantity() {
     setState(() {
-      quantityCount--;
+      if (quantityCount > 0) {
+        quantityCount--;
+      }
     });
   }
 
@@ -30,7 +34,24 @@ class _FoodDetailsPageState extends State<FoodDetailsPage> {
   }
 
   //add to cart
-  void addToCart() {}
+  void addToCart() {
+    //only add to cart if cart is not empty
+    if (quantityCount > 0) {
+      //get access to shop
+      final shop = context.read<Shop>();
+
+      //add to cart
+      shop.addToCart(widget.food, quantityCount);
+
+      //let user know its successful
+      showDialog(
+        context: context,
+        builder:
+            (context) =>
+                AlertDialog(content: 'Item was successfully added to cart;'),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

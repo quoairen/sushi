@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:proj/components/button.dart';
 import 'package:proj/components/food_tile.dart';
-import 'package:proj/models/food.dart';
+import 'package:proj/models/shop.dart';
 import 'package:proj/pages/food_details_page.dart';
 import 'package:proj/theme/colors.dart';
+import 'package:provider/provider.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
@@ -16,39 +17,26 @@ class MenuPage extends StatefulWidget {
 class _MenuPageState extends State<MenuPage> {
   //food menu
 
-  List foodMenu = [
-    Food(
-      name: "Salmon Sushi",
-      price: '21.0',
-      imagePath: 'assets/images/sushi_caviar.png',
-      rating: '4.9',
-    ),
-    Food(
-      name: 'Tuna',
-      price: '23.00',
-      imagePath: 'assets/images/sushi_belt.png',
-      rating: '4.3',
-    ),
-    Food(
-      name: 'Temaki',
-      price: '26.00',
-      imagePath: 'assets/images/temaki.png',
-      rating: '5.0',
-    ),
-  ];
-
   //navigate to food item details
   void navigateToFoodDetails(int index) {
+    //get the shop and menu
+    final shop = context.read<Shop>();
+    final foodMenu = shop.foodMenu;
+
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => FoodDetailsPage(
-        food: foodMenu[index],
-      )),
+      MaterialPageRoute(
+        builder: (context) => FoodDetailsPage(food: foodMenu[index]),
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    //get the shop and menu
+    final shop = context.read<Shop>();
+    final foodMenu = shop.foodMenu;
+
     return Scaffold(
       backgroundColor: Colors.grey[300],
       appBar: AppBar(
@@ -136,8 +124,10 @@ class _MenuPageState extends State<MenuPage> {
                 scrollDirection: Axis.horizontal,
                 itemCount: foodMenu.length,
                 itemBuilder:
-                    (context, index) =>
-                        FoodTile(food: foodMenu[index], onTap:() => navigateToFoodDetails(index)),
+                    (context, index) => FoodTile(
+                      food: foodMenu[index],
+                      onTap: () => navigateToFoodDetails(index),
+                    ),
               ),
             ),
           ),
