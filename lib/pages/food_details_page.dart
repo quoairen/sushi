@@ -45,10 +45,28 @@ class _FoodDetailsPageState extends State<FoodDetailsPage> {
 
       //let user know its successful
       showDialog(
+        barrierDismissible: false,
         context: context,
         builder:
-            (context) =>
-                AlertDialog(content: 'Item was successfully added to cart;'),
+            (context) => AlertDialog(
+              backgroundColor: primaryColor,
+              content: Text(
+                'Successfully added to cart!',
+                style: TextStyle(color: Colors.white),
+                textAlign: TextAlign.center,
+              ),
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    //remove dialog box
+                    Navigator.pop(context);
+                    //go to previous screen
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(Icons.done, color: Colors.white),
+                ),
+              ],
+            ),
       );
     }
   }
